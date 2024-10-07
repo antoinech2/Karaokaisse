@@ -14,6 +14,7 @@ model Songs {
   id    Int     @id @default(autoincrement())
   title String
   artist  String
-  videoId String
+  videoId String  @unique
   channel String
+  publishedAt DateTime
 }
