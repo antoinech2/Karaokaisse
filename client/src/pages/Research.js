@@ -1,35 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Container, Box, Typography, List, ListItem, ListItemText, Grid, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-
-// Données statiques pour simuler des résultats de recherche
-const mockVideoData = [
-  {
-    id: "dQw4w9WgXcQ",
-    title: "Rick Astley - Never Gonna Give You Up (Official Music Video)",
-    channelTitle: "Rick Astley",
-  },
-  {
-    id: "3JZ_D3ELwOQ",
-    title: "Charlie Puth - Attention [Official Video]",
-    channelTitle: "Charlie Puth",
-  },
-  {
-    id: "M7lc1UVf-VE",
-    title: "YouTube Developers Live: Embedded Web Player Customization",
-    channelTitle: "YouTube Developers",
-  },
-  {
-    id: "9bZkp7q19f0",
-    title: "PSY - GANGNAM STYLE(강남스타일) M/V",
-    channelTitle: "officialpsy",
-  },
-  {
-    id: "fLexgOxsZu0",
-    title: "Ed Sheeran - Shape of You [Official Video]",
-    channelTitle: "Ed Sheeran",
-  },
-];
+import search from '../api/Search';
 
 function SearchPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -38,18 +10,18 @@ function SearchPage() {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const navigate = useNavigate(); // Pour la navigation vers d'autres routes
 
-  // Fonction pour simuler une recherche avec des données statiques
+  
   const searchVideos = (query) => {
-    if (query === '') {
-      setResults([]); // Si la recherche est vide, on n'affiche pas de résultats
-    } else {
-      // Filtrer les vidéos par le nom recherché
-      const filteredVideos = mockVideoData.filter((video) =>
-        video.title.toLowerCase().includes(query.toLowerCase())
-      );
-      setResults(filteredVideos);
-    }
-    setLoading(false); // Désactiver l'état de chargement après la recherche
+    // Utiliser la fonction de recherche pour récupérer les vidéos
+    search(query)
+      .then((data) => {
+        setResults(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching videos: ", error);
+        setLoading(false);
+      });
   };
 
   // Utiliser useEffect pour déclencher la recherche quand l'utilisateur tape
@@ -100,7 +72,7 @@ function SearchPage() {
       {/* Loader pendant la recherche */}
       {loading && <CircularProgress size={24} />}
 
-      {/* Liste des résultats */}
+      {/* Liste des résultats'élément séléctionné reste en mode séléctionné */}
       {results.length > 0 && (
         <List sx={{ mt: 4 }}>
           {results.map((video, index) => (
@@ -109,8 +81,15 @@ function SearchPage() {
               key={index}
               selected={selectedVideo && selectedVideo.id === video.id}
               onClick={() => handleSelectVideo(video)}
+              sx={{
+                backgroundColor: selectedVideo && selectedVideo.id === video.id ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                },
+                borderRadius: '4px',
+              }}
             >
-              <ListItemText primary={video.title} secondary={video.channelTitle} />
+              <ListItemText primary={video.title} secondary={video.artist} />
             </ListItem>
           ))}
         </List>
