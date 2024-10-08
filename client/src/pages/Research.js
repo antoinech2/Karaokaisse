@@ -79,7 +79,7 @@ function SearchPage() {
             <ListItem
               button
               key={index}
-              selected={selectedVideo && selectedVideo.id === video.id}
+              selected={selectedVideo.id === video.id}
               onClick={() => handleSelectVideo(video)}
               sx={{
                 backgroundColor: selectedVideo && selectedVideo.id === video.id ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
