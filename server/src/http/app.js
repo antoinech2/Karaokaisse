@@ -4,7 +4,9 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { PrismaClient } from '@prisma/client';
 import { fileURLToPath } from 'url';
+
 import searchRouter from './routes/search.js';
+import playlistRouter from './routes/playlist.js';
 
 // Initialisation de Prisma
 const prisma = new PrismaClient();
@@ -27,7 +29,7 @@ function initApp(app) {
   });
 
   app.use('/api/search', searchRouter);
-
+  app.use('/api/playlist', playlistRouter);
 
   // Gestion des erreurs 404
   app.use((req, res, next) => {
