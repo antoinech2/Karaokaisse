@@ -3,6 +3,8 @@ import logger from "../../logger.js";
 import { prisma } from "../app.js";
 import express from "express";
 
+import auth from "../middleware/auth.js";
+
 const router = express.Router();
 
 // Fonction pour normaliser les chaînes (supprimer les accents, mettre en minuscules)
@@ -57,7 +59,7 @@ async function searchSongs(query) {
     });
 }
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
     const query = req.query.q;
     if (!query) {
         return res.status(400).json({ error: "Query parameter 'q' is required" });

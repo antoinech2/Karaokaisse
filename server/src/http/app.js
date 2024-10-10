@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url';
 import searchRouter from './routes/search.js';
 import playlistRouter from './routes/playlist.js';
 import voteRouter from './routes/vote.js';
+import authRouter from './routes/auth.js';
 
 // Initialisation de Prisma
 const prisma = new PrismaClient();
@@ -32,6 +33,7 @@ function initApp(app) {
   app.use('/api/search', searchRouter);
   app.use('/api/playlist', playlistRouter);
   app.use('/api/vote', voteRouter);
+  app.use('/api/auth', authRouter);
 
   // Gestion des erreurs 404
   app.use((req, res, next) => {

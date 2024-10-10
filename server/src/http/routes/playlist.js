@@ -2,9 +2,11 @@ import { prisma } from "../app.js";
 import express from "express";
 import logger from "../../logger.js";
 
+import auth from "../middleware/auth.js";
+
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
     const { songId } = req.body;
 
     if (!songId) {
@@ -26,7 +28,7 @@ router.post("/", async (req, res) => {
             data: {
                 songId,
                 // TODO: Replace with the actual user ID
-                userId: 1,
+                userId: req.userId,
             },
         });
 
@@ -36,11 +38,15 @@ router.post("/", async (req, res) => {
     }
 });
 
-router.delete("/", async (req, res) => {
+router.delete("/", auth, async (req, res) => {
     const { id } = req.body;
 
     if (!id) {
         return res.status(400).json({ error: "Missing song ID" });
+    }
+
+    if (!req.isAdmin){
+        return res.status(403).json({ error: "Unauthorized" });
     }
 
     try {
@@ -130,10 +136,13 @@ router.get("/next", async (req, res) => {
     }
 });
 
-router.post("/next", async (req, res) => {
+router.post("/next", auth, async (req, res) => {
+
+    if (!req.isAdmin){
+        return res.status(403).json({ error: "Unauthorized" });
+    }
 
     async function nextSong(){
-        // TODO : Check page présentateur
         try {
             const songs = await getSongsWithScore("QUEUING");
             const song = songs.reduce((prev, current) => (prev.score > current.score ? prev : current), songs[0]);
