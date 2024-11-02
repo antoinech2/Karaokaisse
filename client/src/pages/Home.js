@@ -3,6 +3,7 @@ import { Container, Box, Button, Typography, Grid } from '@mui/material';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 
 function Home() {
+  
   return (
     <Container maxWidth="sm" sx={{ mt: 5, textAlign: 'center' }}>
       {/* Logo de l'application */}
