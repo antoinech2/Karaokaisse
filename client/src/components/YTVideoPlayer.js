@@ -22,10 +22,9 @@ const YouTubePlayer = () => {
     width: '640',
     playerVars: {
       autoplay: 1,  // Démarrer automatiquement
-      controls: 1,  // Afficher les contrôles
+      controls: 0,  // Afficher les contrôles
       disablekb: 1, // Désactiver le clavier pour limiter les interactions
       rel: 0,       // Ne pas afficher de vidéos suggérées
-      modestbranding: 1, // Désactiver le branding YouTube
       origin: window.location.origin // Nécessaire pour certaines intégrations
     },
   };
