@@ -3,6 +3,7 @@ import express from "express";
 import logger from "../../logger.js";
 
 import auth from "../middleware/auth.js";
+import getVideoDetails from "../helper/getVideoDetails.js";
 
 const router = express.Router();
 
@@ -129,6 +130,27 @@ router.get("/next", async (req, res) => {
             return res.status(404).json({ error: "No song in next status" });
         }
 
+        const videoDetails = await getVideoDetails(songs[0].song.videoId);
+        songs[0].song = {...songs[0].song, ...videoDetails};
+
+        res.json(songs[0]);
+    } catch (error) {
+        logger.error("Error fetching next song", error);
+        res.status(500).json({ error: "Error fetching next song" });
+    }
+});
+
+router.get("/current", async (req, res) => {
+    try {
+        const songs = await getSongsWithScore("PLAYING");
+
+        if (songs.length === 0) {
+            return res.status(404).json({ error: "No song playing now" });
+        }
+
+        const videoDetails = await getVideoDetails(songs[0].song.videoId);
+        songs[0].song = {...songs[0].song, ...videoDetails};
+
         res.json(songs[0]);
     } catch (error) {
         logger.error("Error fetching next song", error);
@@ -145,7 +167,7 @@ router.post("/next", auth, async (req, res) => {
     async function nextSong(){
         try {
             const songs = await getSongsWithScore("QUEUING");
-            const song = songs.reduce((prev, current) => (prev.score > current.score ? prev : current), songs[0]);
+            let song = songs.reduce((prev, current) => (prev.score > current.score ? prev : current), songs[0]);
 
             /*
             if (!song) {
@@ -188,6 +210,9 @@ router.post("/next", auth, async (req, res) => {
                 if (!result || !updatedSongPlayed || !updatedSongPlaying) {
                     return res.status(500).json({ error: "Error while updating next song status" });
                 }
+
+                const videoDetails = await getVideoDetails(song.song.videoId);
+                song.song = {...song.song, ...videoDetails};
 
                 res.json(song);
             } else {
