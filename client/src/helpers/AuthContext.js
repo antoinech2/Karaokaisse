@@ -3,27 +3,27 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const token = localStorage.getItem('token');
+    return token ? { token } : null;
+  });
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      setUser({ token }); // Définit `user` si un token est présent
-      console.log("User authenticated with token:", token); // Debugging
+    // Synchronise user avec le token dans localStorage à chaque changement
+    if (user) {
+      localStorage.setItem('token', user.token);
     } else {
-      console.log("No token found in localStorage."); // Debugging
+      localStorage.removeItem('token');
     }
-  }, []);
+  }, [user]);
 
   const login = (userData) => {
     setUser(userData);
-    console.log("User logged in:", userData); // Debugging
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('token');
-    console.log("User logged out."); // Debugging
   };
 
   return (
