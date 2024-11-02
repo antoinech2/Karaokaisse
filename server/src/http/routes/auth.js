@@ -23,9 +23,16 @@ router.post('/register', async (req, res) => {
     if (!email || !regex.test(email)) {
         return res.status(400).json({ error: 'Invalid email provided.' });
     }
-    if (await prisma.user.findUnique({ where: { email } })) {
-        return res.status(409).json({ error: 'User already registered' });
+    try {
+        if (await prisma.user.findUnique({ where: { email } })) {
+            return res.status(409).json({ error: 'User already registered' });
+        }
     }
+    catch (error) {
+        console.error(error)
+        res.status(500).json({ error: 'Registration failed' });
+    }
+
     try {
 
         const hashedPassword = bcrypt.hashSync(password, 10);
