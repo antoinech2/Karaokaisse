@@ -11,7 +11,6 @@ async function login(email, password) {
 
     if (response.status === 200 && response.data.token) {
       localStorage.setItem('token', response.data.token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
       return true;
     } else {
       throw new Error('Erreur inconnue lors de la connexion.');

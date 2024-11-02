@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
 
 const AuthContext = createContext();
 
@@ -12,6 +13,7 @@ export const AuthProvider = ({ children }) => {
     // Synchronise user avec le token dans localStorage à chaque changement
     if (user) {
       localStorage.setItem('token', user.token);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
     } else {
       localStorage.removeItem('token');
     }
