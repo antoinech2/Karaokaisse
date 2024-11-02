@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Box, Button, Typography, Grid } from '@mui/material';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import { Link } from 'react-router-dom';
 
 function Home() {
   
@@ -19,37 +20,40 @@ function Home() {
       {/* Les boutons de navigation */}
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} sm={8}>
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ py: 2 }}
-            href="/search"
-          >
-            Rechercher une chanson
-          </Button>
+          <Link to="/search" style={{ textDecoration: 'none' }}>
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{ py: 2 }}
+            >
+              Rechercher une chanson
+            </Button>
+          </Link>
         </Grid>
         <Grid item xs={12} sm={8}>
-          <Button
-            variant="contained"
-            color="secondary"
-            fullWidth
-            sx={{ py: 2 }}
-            href="/waiting-songs"
-          >
-            Voir les chansons en attente
-          </Button>
+          <Link to="/waiting-songs" style={{ textDecoration: 'none' }}>
+            <Button
+              variant="contained"
+              color="secondary"
+              fullWidth
+              sx={{ py: 2 }}
+            >
+              Voir les chansons en attente
+            </Button>
+          </Link>
         </Grid>
         <Grid item xs={12} sm={8}>
-          <Button
-            variant="outlined"
-            color="primary"
-            fullWidth
-            sx={{ py: 2 }}
-            href="/credits"
-          >
-            Crédits
-          </Button>
+          <Link to="/credits" style={{ textDecoration: 'none' }}>
+            <Button
+              variant="outlined"
+              color="primary"
+              fullWidth
+              sx={{ py: 2 }}
+            >
+              Crédits
+            </Button>
+          </Link>
         </Grid>
       </Grid>
     </Container>
