@@ -38,7 +38,7 @@ export default function Register() {
         setError('Erreur lors de l\'inscription.');
       }
     } catch (error) {
-      setError('Erreur lors de l\'inscription.');
+      setError(error.message);
     }
   };
 

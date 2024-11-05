@@ -16,6 +16,7 @@ async function register(name, email, password) {
     }
   } catch (error) {
     console.error('Registration error:', error);
+    throw new Error(error.message);
   }
 }
 
