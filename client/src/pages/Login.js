@@ -74,6 +74,15 @@ export default function Login() {
           >
             Se connecter
           </Button>
+          <Button
+            variant="text"
+            color="primary"
+            fullWidth
+            style={{ marginTop: '8px' }}
+            onClick={() => navigate('/register')}
+          >
+            Créer un compte
+          </Button>
           {error && (
             <Typography color="error" variant="body2" align="center" sx={{ mt: 2 }}>
               {error}
