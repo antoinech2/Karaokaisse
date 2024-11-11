@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Box, Button, Typography, Grid } from '@mui/material';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
-import { Link, Navigate } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import { logout } from '../api/Login';
 
 function Home() {
