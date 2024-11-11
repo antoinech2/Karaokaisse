@@ -1,9 +1,15 @@
 import React from 'react';
 import { Container, Box, Button, Typography, Grid } from '@mui/material';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
+import { logout } from '../api/Login';
 
 function Home() {
+  //gestion de la déconnexion
+  const handleLogout = () => {
+    logout();
+    window.location.reload();
+  }
   
   return (
     <Container maxWidth="sm" sx={{ mt: 5, textAlign: 'center' }}>
@@ -54,6 +60,17 @@ function Home() {
               Crédits
             </Button>
           </Link>
+        </Grid>
+        <Grid item xs={12} sm={8}>
+          <Button
+            variant="outlined"
+            color="primary"
+            fullWidth
+            sx={{ py: 2 }}
+            onClick={handleLogout}
+          >
+            Déconnexion
+          </Button>
         </Grid>
       </Grid>
     </Container>
