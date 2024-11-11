@@ -118,6 +118,15 @@ export default function Register() {
           >
             S'inscrire
           </Button>
+          <Button
+            variant="text"
+            color="primary"
+            fullWidth
+            sx={{ mt: 1 }}
+            onClick={() => navigate('/login')}
+          >
+            Se connecter
+          </Button>
           {error && !password && (
             <Typography color="error" variant="body2" align="center" sx={{ mt: 2 }}>
               {error}
