@@ -33,4 +33,8 @@ async function login(email, password) {
   }
 }
 
-export default login;
+function logout() {
+  localStorage.removeItem('token');
+}
+
+export default {login, logout};
