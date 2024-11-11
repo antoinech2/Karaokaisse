@@ -4,13 +4,13 @@ import { AuthProvider } from './helpers/AuthContext';
 import ProtectedRoute from './components/PrivateRoute';
 import First from './pages/First';
 import Home from './pages/Home';
-import NotFound from './pages/NotFound';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Credits from './pages/Credits';
 import VideoPlayer from './pages/VideoPlayer';
 import SearchPage from './pages/Research';
 import SongsListPage from './pages/SongsListPage';
+import Page404 from './pages/page404';
 
 function App() {
   return (
@@ -28,7 +28,7 @@ function App() {
           <Route path="/waiting-songs" element={<ProtectedRoute component={SongsListPage} />} />
           <Route path="/video-player" element={<ProtectedRoute component={VideoPlayer} />} />
 
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<Page404 />} />
         </Routes>
       </Router>
     </AuthProvider>
