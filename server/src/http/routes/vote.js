@@ -6,6 +6,25 @@ import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
+router.get("/", auth, async (req, res) => {
+    try {
+        const votes = await prisma.vote.findMany({
+            where: {
+                userId: req.userId,
+            },
+            select: {
+                value: true,
+                playlistId: true,
+            }
+        });
+
+        res.json(votes);
+    } catch (error) {
+        logger.error("Error fetching votes", error);
+        res.status(500).json({ error: "Error fetching votes" });
+    }
+});
+
 router.post("/", auth, async (req, res) => {
     const { playlistSong, value } = req.body;
 
