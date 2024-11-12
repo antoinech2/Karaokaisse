@@ -2,28 +2,21 @@ import React from 'react';
 import { Box, Typography, Button, Grid } from '@mui/material';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
-import { useState, useEffect, useRef } from 'react';
 
-function SongItem({ song, onVoteUp, onVoteDown, isTop3, position }) {
-    const [downButtonWidth, setDownButtonWidth] = useState(0); // Stocker la largeur du bouton Down
-    const downButtonRef = useRef(null); // Référence du bouton Down
-
+function SongItem({ song, onVote, isTop3, position }) {
   // Couleurs spéciales pour les chansons du top 3
   const getTop3Color = (position) => {
     switch (position) {
-      case 1: return '#FFD700'; // Or
-      case 2: return '#C0C0C0'; // Argent
-      case 3: return '#CD7F32'; // Bronze
-      default: return 'transparent'; // Pas de dégradé si au-delà de la 3ème place
+      case 1:
+        return '#FFD700'; // Or
+      case 2:
+        return '#C0C0C0'; // Argent
+      case 3:
+        return '#CD7F32'; // Bronze
+      default:
+        return 'transparent';
     }
   };
-
-    // Utiliser useEffect pour obtenir la largeur du bouton Down
-    useEffect(() => {
-        if (downButtonRef.current) {
-          setDownButtonWidth(downButtonRef.current.offsetWidth);
-        }
-      }, []);
 
   return (
     <Box
@@ -36,34 +29,34 @@ function SongItem({ song, onVoteUp, onVoteDown, isTop3, position }) {
       }}
     >
       <Grid container spacing={2} alignItems="center">
-        {/* Titre de la chanson */}
         <Grid item xs={8}>
-          <Typography variant="h6">{song.title}</Typography>
+          <Typography variant="h6">{song.song.title}</Typography>
           <Typography variant="body2" color="textSecondary">
-            Nombre de voix : {song.votes}
+            Artiste : {song.song.artist}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Score : {song.score}
           </Typography>
         </Grid>
 
         {/* Boutons de vote */}
-        <Grid item xs={4} container justifyContent="flex-end" spacing={2}>
+        <Grid item xs={4} container justifyContent="flex-end" spacing={1}>
           <Grid item>
             <Button
               variant="contained"
-              color="primary"
-              sx={{ width: `${downButtonWidth}px` }}
-              onClick={() => onVoteUp(song.id)}
+              color={song.userVote === 1 ? 'success' : 'primary'}
+              onClick={() => onVote(1)}
             >
-              <ThumbUpIcon sx={{ mr: 1 }}/> Up
+              <ThumbUpIcon sx={{ mr: 1 }} /> Up
             </Button>
           </Grid>
           <Grid item>
             <Button
               variant="contained"
-              color="secondary"
-              ref={downButtonRef}
-              onClick={() => onVoteDown(song.id)}
+              color={song.userVote === -1 ? 'error' : 'secondary'}
+              onClick={() => onVote(-1)}
             >
-              <ThumbDownIcon sx={{ mr: 1 }}/> Down
+              <ThumbDownIcon sx={{ mr: 1 }} /> Down
             </Button>
           </Grid>
         </Grid>

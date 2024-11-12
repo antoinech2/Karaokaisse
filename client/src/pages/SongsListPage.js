@@ -1,38 +1,47 @@
-import React, { useState } from 'react';
-import { Container, Box, Typography, List} from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Container, Box, Typography, List } from '@mui/material';
 import SongItem from '../components/SongItem';
-
-const mockSongsData = [
-  { id: 1, title: 'Rick Astley - Never Gonna Give You Up (Official Music Video)', votes: 120 },
-  { id: 2, title: 'Charlie Puth - Attention [Official Video]', votes: 95 },
-  { id: 3, title: 'YouTube Developers Live: Embedded Web Player Customization', votes: 70 },
-  { id: 4, title: 'PSY - GANGNAM STYLE(강남스타일) M/V', votes: 50 },
-  { id: 5, title: 'Ed Sheeran - Shape of You [Official Video]', votes: 45 },
-];
+import { getPlaylist } from '../api/Playlist';
+import { voteSongUp, deleteVote } from '../api/vote'; // Import des fonctions de vote
 
 function SongsListPage() {
-  const [songs, setSongs] = useState(mockSongsData);
+  const [songs, setSongs] = useState([]);
 
-  // Fonction pour voter "Up"
-  const handleVoteUp = (id) => {
-    setSongs((prevSongs) =>
-      prevSongs.map((song) =>
-        song.id === id ? { ...song, votes: song.votes + 1 } : song
-      )
-    );
+  // Charger les chansons depuis l'API
+  const fetchSongs = async () => {
+    try {
+      const data = await getPlaylist();
+      setSongs(data);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des chansons :', error.message);
+    }
   };
 
-  // Fonction pour voter "Down"
-  const handleVoteDown = (id) => {
-    setSongs((prevSongs) =>
-      prevSongs.map((song) =>
-        song.id === id ? { ...song, votes: song.votes - 1 } : song
-      )
-    );
+  useEffect(() => {
+    fetchSongs();
+  }, []);
+
+  // Fonction pour voter ou supprimer un vote
+  const handleVote = async (id, value) => {
+    try {
+      const song = songs.find((s) => s.id === id);
+
+      if (song && song.userVote === value) {
+        // Si l'utilisateur clique à nouveau sur le même bouton, supprimer le vote
+        await deleteVote(id);
+      } else {
+        // Sinon, soumettre un nouveau vote
+        await voteSongUp(id, value);
+      }
+
+      await fetchSongs(); // Recharger les données après chaque action
+    } catch (error) {
+      console.error('Erreur lors du vote :', error.message);
+    }
   };
 
-  // Trier les chansons par nombre de votes (du plus voté au moins voté)
-  const sortedSongs = [...songs].sort((a, b) => b.votes - a.votes);
+  // Trier les chansons par score (du plus élevé au moins élevé)
+  const sortedSongs = [...songs].sort((a, b) => b.score - a.score);
 
   return (
     <Container maxWidth="md" sx={{ mt: 5 }}>
@@ -47,8 +56,7 @@ function SongsListPage() {
             <SongItem
               key={song.id}
               song={song}
-              onVoteUp={handleVoteUp}
-              onVoteDown={handleVoteDown}
+              onVote={(value) => handleVote(song.id, value)}
               isTop3={index < 3}
               position={index + 1}
             />
