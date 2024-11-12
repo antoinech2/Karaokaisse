@@ -6,7 +6,7 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 async function voteSongUp(playlistSongId, value) {
     try {
         const response = await axios.post(`${serverUrl}/api/vote`, {
-        playlistSongId,
+        playlistSong : playlistSongId,
         value
         });
         if (response.status === 200) {
@@ -39,7 +39,7 @@ async function voteSongUp(playlistSongId, value) {
 async function deleteVote(playlistSongId) {
     try {
         const response = await axios.delete(`${serverUrl}/api/vote`, {
-        data: { playlistSongId },
+        data: { playlistSong: playlistSongId },
         });
         if (response.status === 200) {
             return true;
@@ -63,3 +63,5 @@ async function deleteVote(playlistSongId) {
         }
     }
 }
+
+export { voteSongUp, deleteVote };
