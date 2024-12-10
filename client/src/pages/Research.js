@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Container, Box, Typography, List, ListItem, ListItemText, Grid, CircularProgress } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import search from '../api/Search';
 import { addSongToPlaylist } from '../api/Playlist';
 
@@ -48,10 +48,6 @@ function SearchPage() {
     setSelectedVideo(video);
   };
 
-  const handleGoBack = () => {
-    navigate(-1);
-  };
-
   return (
     <Container maxWidth="md" sx={{ mt: 5, textAlign: 'center', position: 'relative', pb: 10 }}>
       <Typography variant="h4" gutterBottom>
@@ -70,7 +66,7 @@ function SearchPage() {
 
       {loading && <CircularProgress size={24} />}
 
-      <Box sx={{ maxHeight: '50vh', overflowY: 'auto', mb: 8 }}>
+      <Box sx={{ overflowY: 'auto', maxHeight: 'calc(100vh - 300px)', scrollbarWidth: 'none', '&::-webkit-scrollbar': { display: 'none' } }}>
         {results.length > 0 && (
           <List sx={{ mt: 4 }}>
             {results.map((video, index) => (
@@ -119,9 +115,11 @@ function SearchPage() {
       )}
         <Grid container justifyContent="center" paddingTop={2}>
           <Grid item>
-            <Button variant="contained" color="primary" onClick={handleGoBack}>
-              Retour
-            </Button>
+            <Link to="/home" style={{ textDecoration: 'none' }}>
+              <Button variant="contained" color="primary">
+                Retour
+              </Button>
+            </Link>
           </Grid>
         </Grid>
       </Box>

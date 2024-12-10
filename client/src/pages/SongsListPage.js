@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Box, Typography, List } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { Container, Box, Typography, List, Grid, Button } from '@mui/material';
 import SongItem from '../components/SongItem';
 import { getPlaylist } from '../api/Playlist';
 import { voteSongUp, deleteVote } from '../api/vote'; // Import des fonctions de vote
@@ -44,13 +45,13 @@ function SongsListPage() {
   const sortedSongs = [...songs].sort((a, b) => b.score - a.score);
 
   return (
-    <Container maxWidth="md" sx={{ mt: 5 }}>
+    <Container maxWidth="md" sx={{ mt: 5 }} display="flex">
       <Typography variant="h4" gutterBottom>
         Liste des chansons proposées
       </Typography>
 
       {/* Liste des chansons */}
-      <Box sx={{ mt: 4 }}>
+      <Box sx={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)', scrollbarWidth: 'none', '&::-webkit-scrollbar': { display: 'none' } }}>
         <List>
           {sortedSongs.map((song, index) => (
             <SongItem
@@ -63,6 +64,27 @@ function SongsListPage() {
           ))}
         </List>
       </Box>
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          width: '100%',
+          bgcolor: 'background.paper',
+          p: 2,
+          boxShadow: '0 -2px 4px rgba(0, 0, 0, 0.2)',
+        }}
+      >
+        <Grid container justifyContent="center" paddingTop={2}>
+            <Grid item>
+              <Link to="/home" style={{ textDecoration: 'none' }}>
+                <Button variant="contained" color="primary">
+                  Retour
+                </Button>
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
     </Container>
   );
 }
